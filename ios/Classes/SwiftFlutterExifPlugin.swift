@@ -84,6 +84,7 @@ public class SwiftFlutterExifPlugin: NSObject, FlutterPlugin {
                     let tagValue = ((args as AnyObject)["tagValue"] as? String)
                     if (tagValue == nil) {
                         result(FlutterError(code: "ARGUMENT_ERROR", message: "tagValue is required", details: nil))
+                        return
                     }
                     exifInterface?.setAttribute(tag: tag!, value: tagValue!)
                     result(true)
@@ -104,6 +105,7 @@ public class SwiftFlutterExifPlugin: NSObject, FlutterPlugin {
                     var latLong = exifInterface?.getLatLong()
                     if (latLong == nil || latLong!.count < 2) {
                         result(false)
+                        return
                     }
                     var message = Data(capacity: MemoryLayout<Double>.size * 2)
                     message.append(UnsafeBufferPointer(start: &latLong![0], count: 1))
@@ -137,6 +139,7 @@ public class SwiftFlutterExifPlugin: NSObject, FlutterPlugin {
                     let longitude = ((args as AnyObject)["longitude"] as? Double)
                     if (longitude == nil) {
                         result(FlutterError(code: "ARGUMENT_ERROR", message: "longitude is required", details: nil))
+                        return
                     }
                     exifInterface?.setLatLong(latitude: latitude!, longitude: longitude!)
                     result(true)

@@ -87,27 +87,25 @@ public class ExifFileInterface {
     
     public func setLatLong(latitude:Double, longitude:Double) {
         if (latitude < 0.0) {
-            setAttribute(tag: kCGImagePropertyGPSLatitudeRef as String, value: "S")
+            setAttribute(tag: "\(kCGImagePropertyGPSLatitudeRef)" as String, value: "S", dictionary: kCGImagePropertyGPSDictionary)
         }
         else
         {
-            setAttribute(tag: kCGImagePropertyGPSLatitudeRef as String, value: "N")
+            setAttribute(tag: "\(kCGImagePropertyGPSLatitudeRef)" as String, value: "N", dictionary: kCGImagePropertyGPSDictionary)
         }
-        setAttribute(tag: kCGImagePropertyGPSLatitude as String, value: abs(latitude))
+        setAttribute(tag: "\(kCGImagePropertyGPSLatitude)" as String, value: abs(latitude), dictionary: kCGImagePropertyGPSDictionary)
         
         if (longitude < 0.0) {
-            setAttribute(tag: kCGImagePropertyGPSLongitudeRef as String, value: "W")
+            setAttribute(tag: "\(kCGImagePropertyGPSLongitudeRef)" as String, value: "W", dictionary: kCGImagePropertyGPSDictionary)
         }
         else
         {
-            setAttribute(tag: kCGImagePropertyGPSLongitudeRef as String, value: "E")
+            setAttribute(tag: "\(kCGImagePropertyGPSLongitudeRef)" as String, value: "E", dictionary: kCGImagePropertyGPSDictionary)
         }
-        setAttribute(tag: kCGImagePropertyGPSLongitude as String, value: abs(longitude))
+        setAttribute(tag: "\(kCGImagePropertyGPSLongitude)" as String, value: abs(longitude), dictionary: kCGImagePropertyGPSDictionary)
     }
     
     public func getLatLong() -> [Double]? {
-        print(CGImageMetadataCopyTags(exifAttributes))
-        
         let latitudeRef = getAttribute(tag: "GPS\(kCGImagePropertyGPSLatitudeRef)") as! String?
         let latitude = getAttributeDouble(tag: "GPS\(kCGImagePropertyGPSLatitude)")
         let longitudeRef = getAttribute(tag: "GPS\(kCGImagePropertyGPSLongitudeRef)") as! String?
