@@ -17,8 +17,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final ImagePicker _picker = ImagePicker();
   String _response = '(please, wait)';
-  FlutterExif exif;
-  Uint8List imageToRead;
+  FlutterExif? exif;
+  Uint8List? imageToRead;
 
   @override
   void initState() {
@@ -26,28 +26,28 @@ class _MyAppState extends State<MyApp> {
   }
 
   void readFile() async {
-    if (exif == null) {
-      setFile();
+    if (exif == null || imageToRead == null) {
+      await setFile();
     }
-    exif = FlutterExif.fromBytes(imageToRead);
-    final result = await exif.getAttribute(TAG_USER_COMMENT);
-    final latlon = await exif.getLatLong();
+    exif = FlutterExif.fromBytes(imageToRead!);
+    final result = await exif!.getAttribute(TAG_USER_COMMENT);
+    final latlon = await exif!.getLatLong();
     print(result);
     print(latlon);
 
     setState(() {
-      _response = result;
+      _response = result!;
     });
   }
 
-  void setFile() async {
-    final pickerImage = await _picker.getImage(source: ImageSource.gallery);
-    Uint8List bytes = await pickerImage.readAsBytes();
+  Future<void> setFile() async {
+    final pickerImage = await _picker.pickImage(source: ImageSource.gallery);
+    Uint8List bytes = await pickerImage!.readAsBytes();
     exif = FlutterExif.fromBytes(bytes);
-    await exif.setLatLong(20.0, 10.0);
-    await exif.setAttribute(TAG_USER_COMMENT, 'my json structure');
-    await exif.saveAttributes();
-    imageToRead = await exif.imageData;
+    await exif!.setLatLong(20.0, 10.0);
+    await exif!.setAttribute(TAG_USER_COMMENT, 'my json structure');
+    await exif!.saveAttributes();
+    imageToRead = await exif!.imageData;
   }
 
   @override
